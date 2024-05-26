@@ -11,7 +11,7 @@ namespace jwt_authentication_api.Configurations
             {
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    Description = "Insira o token JWT desta maneira: Bearer {seu token}",
+                    Description = "Insert the JWT token this way: Bearer {your token}",
                     Name = "Authorization",
                     Scheme = "Bearer",
                     BearerFormat = "JWT",
