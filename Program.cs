@@ -1,6 +1,6 @@
-using jwt_authentication_api.Configurations;
+using API.Configurations;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddApiConfig()
        .AddCorsConfig()
@@ -9,21 +9,21 @@ builder.AddApiConfig()
        .AddDbContextConfig()
        .AddIdentityConfig();
 
-var config = new ConfigurationBuilder()
+IConfigurationRoot config = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseCors("Development");
+    _ = app.UseSwagger();
+    _ = app.UseSwaggerUI();
+    _ = app.UseCors("Development");
 }
 else
 {
-    app.UseCors("Production");
+    _ = app.UseCors("Production");
 }
 
 app.UseHttpsRedirection();

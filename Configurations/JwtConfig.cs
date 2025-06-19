@@ -1,39 +1,38 @@
-﻿using jwt_authentication_api.Models;
+﻿using API.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
-namespace jwt_authentication_api.Configurations
+namespace API.Configurations;
+
+public static class JwtConfig
 {
-    public static class JwtConfig
+    public static WebApplicationBuilder AddJwtConfig(this WebApplicationBuilder builder)
     {
-        public static WebApplicationBuilder AddJwtConfig(this WebApplicationBuilder builder)
+        IConfigurationSection jwtSettingsSection = builder.Configuration.GetSection("JwtSettings");
+        _ = builder.Services.Configure<JwtSettings>(jwtSettingsSection);
+
+        JwtSettings? jwtSettings = jwtSettingsSection.Get<JwtSettings>();
+        byte[] key = Encoding.ASCII.GetBytes(jwtSettings!.Secret);
+
+        _ = builder.Services.AddAuthentication(x =>
         {
-            var jwtSettingsSection = builder.Configuration.GetSection("JwtSettings");
-            builder.Services.Configure<JwtSettings>(jwtSettingsSection);
-
-            var jwtSettings = jwtSettingsSection.Get<JwtSettings>();
-            var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
-
-            builder.Services.AddAuthentication(x =>
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(x =>
+        {
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x =>
-            {
-                x.RequireHttpsMetadata = false;
-                x.SaveToken = true;
-                x.TokenValidationParameters = new TokenValidationParameters
-                {
-                    IssuerSigningKey = new SymmetricSecurityKey(key),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidAudience = jwtSettings.Audience,
-                    ValidIssuer = jwtSettings.Issuer
-                };
-            });
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidAudience = jwtSettings.Audience,
+                ValidIssuer = jwtSettings.Issuer
+            };
+        });
 
-            return builder;
-        }
+        return builder;
     }
 }

@@ -1,12 +1,11 @@
-﻿namespace jwt_authentication_api.Configurations
-{
-    public static class ApiConfig
-    {
-        public static WebApplicationBuilder AddApiConfig(this WebApplicationBuilder builder)
-        {
-            builder.Services.AddControllers();
+﻿namespace API.Configurations;
 
-            return builder;
-        }
+public static class ApiConfig
+{
+    public static WebApplicationBuilder AddApiConfig(this WebApplicationBuilder builder)
+    {
+        _ = builder.Services.AddControllers();
+
+        return builder;
     }
 }
