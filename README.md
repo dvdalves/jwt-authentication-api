@@ -19,7 +19,7 @@ This is a basic CRUD API for managing products using .NET 8 and SQL Server, with
 
 ## Getting Started
 - **Prerequisites**
-- **.NET 8 SDK**
+- **.NET 9 SDK**
 - **SQL Server**
 
 
